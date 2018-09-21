@@ -1,0 +1,79 @@
+
+
+https://scotch.io/tutorials/build-a-crud-web-app-with-python-and-flask-part-one
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://scotch.io/tutorials/build-a-crud-web-app-with-python-and-flask-part-two
+
+In Part Two, we will work on:
+
+Creating an admin user and admin dashboard
+Creating, listing, editing and deleting departments
+Creating, listing, editing and deleting roles
+Assigning departments and roles to employees
+
+We add admin as a user in employee table from shell.Now that we have an admin user, we need to add a view for an admin dashboard. We also need to ensure that once the admin user logs in, they are redirected to the admin dashboard and not the one for non-admin users. We will do this in the home blueprint.Next we'll create the admin dashboard template. Create an admin_dashboard.html file in the templates/home directory, and then add the following code in it:
+
+Departments--->
+
+Now we'll start working on the admin blueprint, which has the bulk of the functionality in the application. We'll begin by building out CRUD functionality for the departments.
+
+Make form in admin/forms.py
+
+code in admin/views.py includes full crud for admi to add, list, delete and edit departments. expalins are as follows-->
+
+We begin by creating a function, check_admin, which throws a 403 Forbidden error if a non-admin user attempts to access these views. We will call this function in every admin view.
+
+The list_departments view queries the database for all departments and assigns them to the variable departments, which we will use to list them in the template.
+
+The add_department view creates a new department object using the form data, and adds it to the database. If the department name already exists, an error message is displayed. This view redirects to the list_departments. This means that once the admin user creates a new department, they will be redirected to the Departments page.
+
+The edit_department view takes one parameter: id . This is the department ID, and will be passed to the view in the template. The view queries the database for a department with the ID specified. If the department doesn't exist, a 404 Not Found error is thrown. If it does, it is updated with the form data.
+
+The delete_department view is similar to the edit_department one, in that it takes a department ID as a parameter and throws an error if the specified department doesn't exist. If it does, it is deleted from the database.
+
+Note that we render the same template for adding and editing individual departments: department.html. This is why we have the add_department variable in the add_department view (where it is set to True), as well as in the edit_department view (where it is set to False). We'll use this variable in the department.html template to determine what wording to use for the title and heading.
+
+Now for templates we make tempates/admin/departments/departments.html and department.html
+
+As now login as admin and go to departments we have no department so add dept. it will show and check edit and delte also.
+
+upto here we have completed full CRUD of departments.
+
+ROLES---->
+
+Now to work on the roles. This will be very similar to the departments code because the functionality for roles and departments is exactly the same.
+
+Forms
+
+We'll start by creating the form to add and edit roles. Add the following code to the admin/forms.py file:
+we will make form for role and add same as CRUD also for role which will handle admin.These list, add, edit, and delete views are similar to the ones for departments that we created earlier.
+
+Create a roles directory in the templates/admin directory. In it, create the roles.html and role.html files:
+
+roles.html--->Just like we did for the departments, we have created a table where we will display all the roles with their name, description, and number of employees. Each role listed will also have an edit and delete link. If there are no roles, a message of the same will be displayed. There is also a button which can be clicked to add a new role.
+
+role.html-->We use the add_role variable above the same way we used the add_department variable for the department.html template.
+
+update url link in base.html and check roles are running good. By all adding.listing.deleting,editing roles.
+
+Now to work on listing employees, as well as assigning them departments and roles.
+
+We'll need a form to assign each employee a department and role. Add the following to the admin/forms.py file:
+
+we will make EmployeeAssignForm
+
+We have imported a new field type, QuerySelectField, which we use for both the department and role fields. This will query the database for all departments and roles. The admin user will select one department and one role using the form on the front-end.
+
+
